@@ -328,6 +328,7 @@ def changedetection_app(config=None, datastore_o=None):
 
                 # CSS Filter, extract the HTML that matches and feed that into the existing inscriptis::get_text
                 html_content = html_tools.workarounds_for_obfuscations(newest_version_file_contents)
+                #trun html_content into Selector object for the HTML or XML text that you want to parse
                 res = Selector(text=html_content)
 
                 feed_title = watch['title'] if watch['title'] else 'changedetection.io'
@@ -342,50 +343,55 @@ def changedetection_app(config=None, datastore_o=None):
 
                     # For HTML/XML we offer xpath as an option, just start a regular xPath "/.."
                     if css_filter_rule[0] == '/' or css_filter_rule.startswith('xpath:'):
-                        posts = res.xpath(css_filter_rule)
+                        _css_filter_rule = f"//{css_filter_rule.split('/')[-1]}"
+                        posts = res.xpath(_css_filter_rule)
 
                         for post in posts:
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
+                                print(selector)
                                 if selector.startswith("title"):
                                     _title = selector.strip().split(':')[1]
-                                    title = post.xpath(_title).get()
-                                    fe.title(title)
+                                    title = post.xpath(_title).getall()
+                                    fe.title("".join(title))
                                 elif selector.startswith("author"):
                                     _author = selector.strip().split(':')[1]
                                     author = post.xpath(_author).get()
-                                    fe.author(name = author, email='jdoe@example.com')
+                                    fe.author(name = author, email='chinobing@github.com')
                                 elif selector.startswith("link"):
                                     _link = selector.strip().split(':')[1]
                                     link = post.xpath(_link).get()
-                                    fe.link(href=link, rel='alternate', type='CDATA')
+                                    fe.link(href=link)
                                 elif selector.startswith("description"):
                                     _description = selector.strip().split(':')[1]
-                                    description = post.xpath(_description).get()
-                                    fe.content(description, type='CDATA')
+                                    description = post.xpath(_description).getall()
+                                    fe.content("".join(description), type='CDATA')
                     else:
-                        posts = res.css(css_filter_rule)
+                        _css_filter_rule = css_filter_rule.split(' ')[-1]
+                        posts = res.css(_css_filter_rule)
                         for post in posts:
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
+                                print(selector)
                                 if selector.startswith("title"):
-                                    _title = selector.strip().split(':')[1]
-                                    title = post.css(_title).get()
-                                    fe.title(title)
+                                    _title = selector.strip().split(':', 1)[1]
+                                    print(_title)
+                                    title = post.css(_title).getall()
+                                    fe.title("".join(title))
                                 elif selector.startswith("author"):
-                                    _author = selector.strip().split(':')[1]
+                                    _author = selector.strip().split(':', 1)[1]
                                     author = post.css(_author).get()
-                                    fe.author(name = author, email='jdoe@example.com')
+                                    fe.author(name = author, email='chinobing@github.com')
                                 elif selector.startswith("link"):
-                                    _link = selector.strip().split(':')[1]
+                                    _link = selector.strip().split(':', 1)[1]
                                     link = post.css(_link).get()
-                                    fe.link(href=link, rel='alternate', type='CDATA')
+                                    fe.link(href=link)
                                 elif selector.startswith("description"):
-                                    _description = selector.strip().split(':')[1]
-                                    description = post.css(_description).get()
-                                    fe.content(description, type='CDATA')
+                                    _description = selector.strip().split(':', 1)[1]
+                                    description = post.css(_description).getall()
+                                    fe.content("".join(description), type='CDATA')
 
                     response = make_response(indiv_fg.rss_str(pretty=True))
                     response.headers.set('Content-Type', 'application/rss+xml;charset=utf-8')
