@@ -8,6 +8,7 @@ import time
 from copy import deepcopy
 from threading import Event
 from parsel import Selector
+import json
 
 import flask_login
 import logging
@@ -341,8 +342,34 @@ def changedetection_app(config=None, datastore_o=None):
                 # Then we assume HTML
                 if has_filter_rule and has_rss_selectors:
 
+                    # For parsing JSON, just start a "json:"
+                    if css_filter_rule.startswith('json:'):
+                        # Converting string to list
+                        posts = json.loads(html_content)
+
+                        for post in posts:
+                            fe = indiv_fg.add_entry()
+
+                            for selector in rss_selectors:
+                                if selector.startswith("title"):
+                                    _title = selector.split(':')[1].strip()
+                                    title = html_tools._parse_json(post,f'json:{_title}')
+                                    fe.title(title)
+                                elif selector.startswith("author"):
+                                    _author = selector.split(':')[1].strip()
+                                    author = html_tools._parse_json(post,f'json:{_author}')
+                                    fe.author(name = author, email='chinobing@github.com')
+                                elif selector.startswith("link"):
+                                    _link = selector.split(':')[1].strip()
+                                    link = html_tools._parse_json(post,f'json:{_link}')
+                                    fe.link(href=link)
+                                elif selector.startswith("description"):
+                                    _description = selector.split(':')[1].strip()
+                                    description = html_tools._parse_json(post,f'json:{_description}')
+                                    fe.content(description, type='CDATA')
+
                     # For HTML/XML we offer xpath as an option, just start a regular xPath "/.."
-                    if css_filter_rule[0] == '/' or css_filter_rule.startswith('xpath:'):
+                    elif css_filter_rule[0] == '/' or css_filter_rule.startswith('xpath:'):
                         _css_filter_rule = f"//{css_filter_rule.split('/')[-1]}"
                         posts = res.xpath(_css_filter_rule)
 
@@ -350,21 +377,20 @@ def changedetection_app(config=None, datastore_o=None):
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
-                                print(selector)
                                 if selector.startswith("title"):
-                                    _title = selector.strip().split(':')[1]
+                                    _title = selector.strip().split(':')[1].strip()
                                     title = post.xpath(_title).getall()
                                     fe.title("".join(title))
                                 elif selector.startswith("author"):
-                                    _author = selector.strip().split(':')[1]
+                                    _author = selector.split(':')[1].strip()
                                     author = post.xpath(_author).get()
                                     fe.author(name = author, email='chinobing@github.com')
                                 elif selector.startswith("link"):
-                                    _link = selector.strip().split(':')[1]
+                                    _link = selector.split(':')[1].strip()
                                     link = post.xpath(_link).get()
                                     fe.link(href=link)
                                 elif selector.startswith("description"):
-                                    _description = selector.strip().split(':')[1]
+                                    _description = selector.split(':')[1].strip()
                                     description = post.xpath(_description).getall()
                                     fe.content("".join(description), type='CDATA')
                     else:
@@ -374,22 +400,21 @@ def changedetection_app(config=None, datastore_o=None):
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
-                                print(selector)
                                 if selector.startswith("title"):
-                                    _title = selector.strip().split(':', 1)[1]
+                                    _title = selector.split(':', 1)[1].strip()
                                     print(_title)
                                     title = post.css(_title).getall()
                                     fe.title("".join(title))
                                 elif selector.startswith("author"):
-                                    _author = selector.strip().split(':', 1)[1]
+                                    _author = selector.split(':', 1)[1].strip()
                                     author = post.css(_author).get()
                                     fe.author(name = author, email='chinobing@github.com')
                                 elif selector.startswith("link"):
-                                    _link = selector.strip().split(':', 1)[1]
+                                    _link = selector.split(':', 1)[1].strip()
                                     link = post.css(_link).get()
                                     fe.link(href=link)
                                 elif selector.startswith("description"):
-                                    _description = selector.strip().split(':', 1)[1]
+                                    _description = selector.split(':', 1)[1].strip()
                                     description = post.css(_description).getall()
                                     fe.content("".join(description), type='CDATA')
 

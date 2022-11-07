@@ -215,13 +215,22 @@ author: .author
 link: .link
 description: .description ")}}
                       <span class="pure-form-message-inline">
-                           <p style="color:red">It works only under <a href = "https://github.com/dgtlmoon/changedetection.io/wiki/Detecting-changes-in-HTML-page-sources">HTML page sources</a>.</p>
+                           <p style="color:red">It works only under <a href = "https://github.com/dgtlmoon/changedetection.io/wiki/Detecting-changes-in-HTML-page-sources">HTML page sources</a> or JSON.</p>
                         <ul>
-                          <li> HTML element(s) for CSS or XPATH selector.</li>
-                          <li> <code>title: .title</code> OR <code>.//div[@class='title']//text()</code></li>
-                          <li> <code>author: .author</code> OR <code>.//small[@class='author']//text()</code></li>
-                          <li> <code>link: span a::attr(href)</code> OR <code>.//a/@href</code></li>
-                          <li> <code>description: .description</code> OR <code>./span[@class='description']//text()</code></li>
+                          <li> HTML element(s) for CSS or XPATH selector:</li>
+                            <ul>
+                              <li> <code>title: .title</code> OR <code>.//div[@class='title']//text()</code></li>
+                              <li> <code>author: .author</code> OR <code>.//small[@class='author']//text()</code></li>
+                              <li> <code>link: span a::attr(href)</code> OR <code>.//a/@href</code></li>
+                              <li> <code>description: .description</code> OR <code>./span[@class='description']//text()</code></li>
+                            </ul>
+                          <li>Keywords for JSON filter:</li>
+                            <ul>
+                              <li> <code>title: $.title</code> OR <code>title: title</code></li>
+                              <li> <code>author: $.author</code> OR <code>author: author</code></li>
+                              <li> <code>link: $.url</code> OR <code>link: link</code></li>
+                              <li> <code>description: $.description</code> OR <code>description: description</code></li>
+                            </ul>
                         </ul>
                       </span>
                     </div>
