@@ -346,7 +346,7 @@ def changedetection_app(config=None, datastore_o=None):
                     # For parsing JSON, just start a "json:"
                     if css_filter_rule.startswith('json:'):
                         # Converting string to list
-                        posts = reversed(json.loads(html_content, object_pairs_hook=OrderedDict))
+                        posts = json.loads(html_content, object_pairs_hook=OrderedDict)[::-1]
 
                         for post in posts:
                             fe = indiv_fg.add_entry()
@@ -374,7 +374,7 @@ def changedetection_app(config=None, datastore_o=None):
                         _css_filter_rule = f"//{css_filter_rule.split('/')[-1]}"
                         posts = res.xpath(_css_filter_rule)
 
-                        for post in posts:
+                        for post in posts[::-1]:
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
@@ -397,7 +397,7 @@ def changedetection_app(config=None, datastore_o=None):
                     else:
                         _css_filter_rule = css_filter_rule.split(' ')[-1]
                         posts = res.css(_css_filter_rule)
-                        for post in posts:
+                        for post in posts[::-1]:
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
@@ -419,7 +419,7 @@ def changedetection_app(config=None, datastore_o=None):
                                     description = post.css(_description).getall()
                                     fe.content("".join(description), type='CDATA')
 
-                    response = make_response(indiv_fg.rss_str(pretty=True))
+                    response = make_response(indiv_fg.rss_str())
                     response.headers.set('Content-Type', 'application/rss+xml;charset=utf-8')
                     return response
 
