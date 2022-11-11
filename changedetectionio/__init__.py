@@ -352,21 +352,21 @@ def changedetection_app(config=None, datastore_o=None):
 
                             for selector in rss_selectors:
                                 if selector.startswith("title"):
-                                    _title = selector.split(':')[1].strip()
+                                    _title = selector.split(':')[1].strip( )
                                     title = html_tools._parse_json(post,f'json:{_title}')
-                                    fe.title(title)
+                                    fe.title(title.strip('"'))
                                 elif selector.startswith("author"):
                                     _author = selector.split(':')[1].strip()
                                     author = html_tools._parse_json(post,f'json:{_author}')
-                                    fe.author(name = author, email='chinobing@github.com')
+                                    fe.author(name = author.strip('"'), email='chinobing@github.com')
                                 elif selector.startswith("link"):
                                     _link = selector.split(':')[1].strip()
                                     link = html_tools._parse_json(post,f'json:{_link}')
-                                    fe.link(href=link)
+                                    fe.link(href=link.strip('"'))
                                 elif selector.startswith("description"):
                                     _description = selector.split(':')[1].strip()
                                     description = html_tools._parse_json(post,f'json:{_description}')
-                                    fe.content(description, type='CDATA')
+                                    fe.content(description.strip('"'), type='CDATA')
 
                     # For HTML/XML we offer xpath as an option, just start a regular xPath "/.."
                     elif css_filter_rule[0] == '/' or css_filter_rule.startswith('xpath:'):
