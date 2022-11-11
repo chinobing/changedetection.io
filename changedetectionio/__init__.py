@@ -374,7 +374,7 @@ def changedetection_app(config=None, datastore_o=None):
                         _css_filter_rule = f"//{css_filter_rule.split('/')[-1]}"
                         posts = res.xpath(_css_filter_rule)
 
-                        for post in posts:
+                        for post in reversed(posts):
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
@@ -397,7 +397,7 @@ def changedetection_app(config=None, datastore_o=None):
                     else:
                         _css_filter_rule = css_filter_rule.split(' ')[-1]
                         posts = res.css(_css_filter_rule)
-                        for post in posts:
+                        for post in reversed(posts):
                             fe = indiv_fg.add_entry()
 
                             for selector in rss_selectors:
