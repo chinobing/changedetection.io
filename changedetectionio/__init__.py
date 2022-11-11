@@ -8,6 +8,7 @@ import time
 from copy import deepcopy
 from threading import Event
 from parsel import Selector
+from collections import OrderedDict
 import json
 
 import flask_login
@@ -345,7 +346,7 @@ def changedetection_app(config=None, datastore_o=None):
                     # For parsing JSON, just start a "json:"
                     if css_filter_rule.startswith('json:'):
                         # Converting string to list
-                        posts = json.loads(html_content)
+                        posts = reversed(json.loads(html_content, object_pairs_hook=OrderedDict))
 
                         for post in posts:
                             fe = indiv_fg.add_entry()
