@@ -343,6 +343,8 @@ def changedetection_app(config=None, datastore_o=None):
                 # Then we assume HTML
                 if has_filter_rule and has_rss_selectors:
 
+                    base_url = ''
+
                     # For parsing JSON, just start a "json:"
                     if css_filter_rule.startswith('json:'):
                         # Converting string to list
@@ -406,7 +408,6 @@ def changedetection_app(config=None, datastore_o=None):
                         posts = res.css(_css_filter_rule)
                         for post in posts[::-1]:
                             fe = indiv_fg.add_entry()
-                            base_url = ''
 
                             for selector in rss_selectors:
                                 if selector.startswith("base"):
