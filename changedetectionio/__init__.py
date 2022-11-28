@@ -366,7 +366,7 @@ def changedetection_app(config=None, datastore_o=None):
                                     _link = selector.split(':')[1].strip()
                                     link = html_tools._parse_json(post,f'json:{_link}')
                                     link = link.strip('"')
-                                    f_link = f'{base_url}/{link}'
+                                    f_link = f'{base_url}/{link}' if base_url else link
                                     fe.link(href=f_link)
                                 elif selector.startswith("description"):
                                     _description = selector.split(':')[1].strip()
@@ -395,7 +395,7 @@ def changedetection_app(config=None, datastore_o=None):
                                 elif selector.startswith("link"):
                                     _link = selector.split(':')[1].strip()
                                     link = post.xpath(_link).get()
-                                    f_link = f'{base_url}/{link}'
+                                    f_link = f'{base_url}/{link}' if base_url else link
                                     fe.link(href=f_link)
                                 elif selector.startswith("description"):
                                     _description = selector.split(':')[1].strip()
@@ -422,7 +422,7 @@ def changedetection_app(config=None, datastore_o=None):
                                 elif selector.startswith("link"):
                                     _link = selector.split(':', 1)[1].strip()
                                     link = post.css(_link).get()
-                                    f_link = f'{base_url}/{link}'
+                                    f_link = f'{base_url}/{link}' if base_url else link
                                     fe.link(href=f_link)
                                 elif selector.startswith("description"):
                                     _description = selector.split(':', 1)[1].strip()
