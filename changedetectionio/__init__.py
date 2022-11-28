@@ -406,6 +406,7 @@ def changedetection_app(config=None, datastore_o=None):
                         posts = res.css(_css_filter_rule)
                         for post in posts[::-1]:
                             fe = indiv_fg.add_entry()
+                            base_url = ''
 
                             for selector in rss_selectors:
                                 if selector.startswith("base"):
