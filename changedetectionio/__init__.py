@@ -353,7 +353,7 @@ def changedetection_app(config=None, datastore_o=None):
 
                             for selector in rss_selectors:
                                 if selector.startswith("base"):
-                                    base_url = selector.split(':')[1].strip( )
+                                    base_url = selector.split(':', 1)[1].strip( )
                                 if selector.startswith("title"):
                                     _title = selector.split(':')[1].strip( )
                                     title = html_tools._parse_json(post,f'json:{_title}')
@@ -383,7 +383,7 @@ def changedetection_app(config=None, datastore_o=None):
 
                             for selector in rss_selectors:
                                 if selector.startswith("base"):
-                                    base_url = selector.split(':')[1].strip( )
+                                    base_url = selector.split(':', 1)[1].strip( )
                                 if selector.startswith("title"):
                                     _title = selector.strip().split(':')[1].strip()
                                     title = post.xpath(_title).getall()
@@ -409,7 +409,7 @@ def changedetection_app(config=None, datastore_o=None):
 
                             for selector in rss_selectors:
                                 if selector.startswith("base"):
-                                    base_url = selector.split(':')[1].strip( )
+                                    base_url = selector.split(':', 1)[1].strip( )
                                 if selector.startswith("title"):
                                     _title = selector.split(':', 1)[1].strip()
                                     print(_title)
